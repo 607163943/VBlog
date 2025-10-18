@@ -20,7 +20,7 @@
 
 ## 3. 技术栈（当前与目标）
 
-**当前（沿袭上游）**
+**当前**
 
 - 后端：Spring Boot、Spring Security、MyBatis、MySQL
 - 前端：Vue、axios、ElementUI、vue-echarts、mavon-editor、vue-router [GitHub](https://github.com/607163943/VBlog)
