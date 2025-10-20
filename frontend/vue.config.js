@@ -4,14 +4,14 @@ module.exports = defineConfig({
   devServer: {
     port: 8080,
     proxy: {
-      '/': {
+      '/api': {
         target: 'http://localhost:8088',
         changeOrigin: true,
         pathRewrite: {
-          '^/': ''
+          '^/api': ''
         }
       }
-    },
+    }
   },
-  lintOnSave: false // 临时禁用eslint
+  lintOnSave: false
 })

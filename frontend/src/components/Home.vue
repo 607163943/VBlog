@@ -21,30 +21,32 @@
         <el-menu
           default-active="0"
           class="el-menu-vertical-demo" style="background-color: #ECECEC" router>
-          <template v-for="(item,index) in this.$router.options.routes" v-if="!item.hidden">
-            <el-submenu :index="index+''" v-if="item.children.length>1" :key="index">
+          <div v-for="(item,index) in groupMenu" :key="index">
+            <el-submenu :index="index+''" v-if="item.children.length>1">
               <template slot="title">
                 <i :class="item.iconCls"></i>
                 <span>{{item.name}}</span>
               </template>
-              <el-menu-item v-for="child in item.children" v-if="!child.hidden" :index="child.path" :key="child.path">
+              <div  v-for="child in item.children" :key="child.path">
+                <el-menu-item v-if="!child.hidden"  :index="child.path" >
                 {{child.name}}
               </el-menu-item>
+              </div>
             </el-submenu>
-            <template v-else>
-              <el-menu-item :index="item.children[0].path">
-                <i :class="item.children[0].iconCls"></i>
-                <span slot="title">{{item.children[0].name}}</span>
+            <div v-else>
+              <el-menu-item :index="item.path" >
+                <i :class="item.iconCls"></i>
+                <span slot="title">{{item.name}}</span>
               </el-menu-item>
-            </template>
-          </template>
+            </div>
+          </div>
         </el-menu>
       </el-aside>
       <el-container>
         <el-main>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item v-text="this.$router.currentRoute.name"></el-breadcrumb-item>
+            <el-breadcrumb-item >{{$router.currentRoute.name}}</el-breadcrumb-item>
           </el-breadcrumb>
           <keep-alive>
             <router-view v-if="this.$route.meta.keepAlive"></router-view>
@@ -56,45 +58,51 @@
   </el-container>
 </template>
 <script>
-  import {getRequest} from '../utils/api'
-  export default{
-    methods: {
-      handleCommand(command){
-        var _this = this;
-        if (command == 'logout') {
-          this.$confirm('注销登录吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(function () {
-            getRequest("/logout")
-            _this.currentUserName = '游客';
-            _this.$router.replace({path: '/'});
-          }, function () {
-            //取消
-          })
-        }
-      }
-    },
-    mounted: function () {
-      this.$alert('为了确保所有的小伙伴都能看到完整的数据演示，数据库只开放了查询权限和部分字段的更新权限，其他权限都不具备，完整权限的演示需要大家在自己本地部署后，换一个正常的数据库用户后即可查看，这点请大家悉知!', '友情提示', {
-        confirmButtonText: '确定',
-        callback: action => {
-        }
-      });
-      var _this = this;
-      getRequest("/currentUserName").then(function (msg) {
-        _this.currentUserName = msg.data;
-      }, function (msg) {
-        _this.currentUserName = '游客';
-      });
-    },
-    data(){
-      return {
-        currentUserName: ''
+import { getRequest } from '../utils/api'
+import { routes } from '@/router/index'
+export default {
+  name: 'HomeCom',
+  data () {
+    return {
+      groupMenu: [],
+      currentUserName: ''
+    }
+  },
+  created () {
+    this.groupMenu = routes.filter(item => !item.hidden)
+  },
+  methods: {
+    handleCommand (command) {
+      const _this = this
+      if (command === 'logout') {
+        this.$confirm('注销登录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function () {
+          getRequest('/logout')
+          _this.currentUserName = '游客'
+          _this.$router.replace({ path: '/' })
+        }, function () {
+          // 取消
+        })
       }
     }
+  },
+  mounted: function () {
+    this.$alert('为了确保所有的小伙伴都能看到完整的数据演示，数据库只开放了查询权限和部分字段的更新权限，其他权限都不具备，完整权限的演示需要大家在自己本地部署后，换一个正常的数据库用户后即可查看，这点请大家悉知!', '友情提示', {
+      confirmButtonText: '确定',
+      callback: action => {
+      }
+    })
+    const _this = this
+    getRequest('/currentUserName').then(function (msg) {
+      _this.currentUserName = msg.data
+    }, function (msg) {
+      _this.currentUserName = '游客'
+    })
   }
+}
 </script>
 <style>
   .home_container {
