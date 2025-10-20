@@ -1,79 +1,23 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import Home from '@/components/Home'
-import ArticleList from '@/components/ArticleList'
-import CateMana from '@/components/CateMana'
+import Login from '@/views/login/Login'
+import Home from '@/views/layout/Home'
+import ArticleList from '@/views/article/ArticleList'
+import CateMana from '@/views/chart/CateMana'
 import DataCharts from '@/components/DataCharts'
-import PostArticle from '@/components/PostArticle'
-import UserMana from '@/components/UserMana'
-import BlogDetail from '@/components/BlogDetail'
+import PostArticle from '@/views/article/PostArticle'
+import UserMana from '@/views/user/UserMana'
+import BlogDetail from '@/views/article/BlogDetail'
 
 Vue.use(Router)
-
-export const routes = [
-  {
-    name: '文章管理',
-    iconCls: 'fa fa-file-text-o',
-    children: [
-      {
-        path: '/articleList',
-        name: '文章列表',
-        meta: {
-          keepAlive: true
-        }
-      },
-      {
-        path: '/postArticle',
-        name: '发表文章',
-        meta: {
-          keepAlive: false
-        }
-      },
-      {
-        path: '/blogDetail',
-        name: '博客详情',
-        hidden: true,
-        meta: {
-          keepAlive: false
-        }
-      },
-      {
-        path: '/editBlog',
-        name: '编辑博客',
-        hidden: true,
-        meta: {
-          keepAlive: false
-        }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    iconCls: 'fa fa-user-o',
-    name: '用户管理',
-    children: []
-  },
-  {
-    path: '/cateMana',
-    iconCls: 'fa fa-reorder',
-    name: '栏目管理',
-    children: []
-  },
-  {
-    path: '/charts',
-    iconCls: 'fa fa-bar-chart',
-    name: '数据统计',
-    children: []
-  }
-]
 
 export default new Router({
   routes: [
     {
       path: '/',
       name: '登录',
-      component: Login
+      component: Login,
+      meta: { keepAlive: false, nav: { show: false } }
     },
     {
       path: '/home',
@@ -84,37 +28,44 @@ export default new Router({
         {
           path: '/articleList',
           name: '文章列表',
-          component: ArticleList
+          component: ArticleList,
+          meta: { keepAlive: true, nav: { group: '文章管理', show: true, iconCls: 'fa fa-file-text-o' } }
         },
         {
           path: '/postArticle',
           name: '发表文章',
-          component: PostArticle
+          component: PostArticle,
+          meta: { keepAlive: false, nav: { group: '文章管理', show: true, groupIcon: 'fa fa-file-text-o' } }
         },
         {
           path: '/blogDetail',
           name: '博客详情',
-          component: BlogDetail
+          component: BlogDetail,
+          meta: { keepAlive: false, nav: { group: '文章管理', show: false, groupIcon: 'fa fa-file-text-o' } }
         },
         {
           path: '/editBlog',
           name: '编辑博客',
-          component: PostArticle
+          component: PostArticle,
+          meta: { keepAlive: false, nav: { group: '文章管理', show: false, groupIcon: 'fa fa-file-text-o' } }
         },
         {
           path: '/user',
           name: '用户管理',
-          component: UserMana
+          component: UserMana,
+          meta: { keepAlive: false, nav: { show: true, icon: 'fa fa-user-o' } }
         },
         {
           path: '/cateMana',
           name: '栏目管理',
-          component: CateMana
+          component: CateMana,
+          meta: { keepAlive: false, nav: { show: true, icon: 'fa fa-reorder' } }
         },
         {
           path: '/charts',
           name: '数据统计',
-          component: DataCharts
+          component: DataCharts,
+          meta: { keepAlive: false, nav: { show: true, icon: 'fa fa-bar-chart' } }
         }
       ]
     }

@@ -4,9 +4,9 @@
       <div class="home_title">V部落博客管理平台</div>
       <div class="home_userinfoContainer">
         <el-dropdown @command="handleCommand">
-  <span class="el-dropdown-link home_userinfo">
-    {{currentUserName}}<i class="el-icon-arrow-down el-icon--right home_userinfo"></i>
-  </span>
+          <span class="el-dropdown-link home_userinfo">
+            {{currentUserName}}<i class="el-icon-arrow-down el-icon--right home_userinfo"></i>
+          </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="sysMsg">系统消息</el-dropdown-item>
             <el-dropdown-item command="MyArticle">我的文章</el-dropdown-item>
@@ -21,22 +21,22 @@
         <el-menu
           default-active="0"
           class="el-menu-vertical-demo" style="background-color: #ECECEC" router>
-          <div v-for="(item,index) in groupMenu" :key="index">
-            <el-submenu :index="index+''" v-if="item.children.length>1">
+          <div v-for="(item,index) in navItems" :key="index">
+            <el-submenu :index="index+''" v-if="Array.isArray(item.value)">
               <template slot="title">
                 <i :class="item.iconCls"></i>
                 <span>{{item.name}}</span>
               </template>
-              <div  v-for="child in item.children" :key="child.path">
-                <el-menu-item v-if="!child.hidden"  :index="child.path" >
+              <div  v-for="(child,index) in item.value" :key="index">
+                <el-menu-item  :index="child.path" >
                 {{child.name}}
               </el-menu-item>
               </div>
             </el-submenu>
             <div v-else>
-              <el-menu-item :index="item.path" >
+              <el-menu-item :index="item.value.path" >
                 <i :class="item.iconCls"></i>
-                <span slot="title">{{item.name}}</span>
+                <span slot="title">{{item.value.name}}</span>
               </el-menu-item>
             </div>
           </div>
@@ -58,20 +58,62 @@
   </el-container>
 </template>
 <script>
-import { getRequest } from '../utils/api'
-import { routes } from '@/router/index'
+import { getRequest } from '../../utils/api'
 export default {
   name: 'HomeCom',
   data () {
     return {
-      groupMenu: [],
-      currentUserName: ''
+      currentUserName: '',
+      navItems: []
     }
   },
-  created () {
-    this.groupMenu = routes.filter(item => !item.hidden)
+  async created () {
+    this.createdNavItems()
+  },
+  async mounted () {
+    try {
+      const res = await getRequest('/currentUserName')
+      this.currentUserName = res.data
+    } catch (error) {
+      this.currentUserName = '游客'
+    }
   },
   methods: {
+    // 创建导航栏结构
+    createdNavItems () {
+      for (let i = 0; i < this.$router.options.routes.length; i++) {
+        const route = this.$router.options.routes[i]
+        if (route.children && route.children.length > 0) {
+          for (let j = 0; j < route.children.length; j++) {
+            const child = route.children[j]
+            this.pushItem(child)
+          }
+        } else {
+          this.pushItem(route)
+        }
+      }
+    },
+    // 添加导航项
+    pushItem (route) {
+      if (!route.meta.nav.show) return
+      if (route.meta.nav.group) {
+        const obj = this.navItems.find(item => item.name === route.meta.nav.group)
+        if (obj) {
+          obj.value.push(route)
+        } else {
+          const obj = {}
+          obj.value = [route]
+          obj.name = route.meta.nav.group
+          obj.iconCls = route.meta.nav.groupIcon
+          this.navItems.push(obj)
+        }
+      } else {
+        const obj = {}
+        obj.value = route
+        obj.iconCls = route.meta.nav.icon
+        this.navItems.push(obj)
+      }
+    },
     handleCommand (command) {
       const _this = this
       if (command === 'logout') {
@@ -88,19 +130,6 @@ export default {
         })
       }
     }
-  },
-  mounted: function () {
-    this.$alert('为了确保所有的小伙伴都能看到完整的数据演示，数据库只开放了查询权限和部分字段的更新权限，其他权限都不具备，完整权限的演示需要大家在自己本地部署后，换一个正常的数据库用户后即可查看，这点请大家悉知!', '友情提示', {
-      confirmButtonText: '确定',
-      callback: action => {
-      }
-    })
-    const _this = this
-    getRequest('/currentUserName').then(function (msg) {
-      _this.currentUserName = msg.data
-    }, function (msg) {
-      _this.currentUserName = '游客'
-    })
   }
 }
 </script>
