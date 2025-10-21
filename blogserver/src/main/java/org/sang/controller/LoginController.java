@@ -2,9 +2,12 @@ package org.sang.controller;
 
 import org.sang.bean.RespBean;
 import org.sang.bean.User;
+import org.sang.pojo.dto.LoginDTO;
+import org.sang.result.Result;
 import org.sang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by sang on 2017/12/17.
  */
 @RestController
-public class LoginRegController {
+public class LoginController {
 
     @Autowired
     UserService userService;
@@ -34,9 +37,10 @@ public class LoginRegController {
      *
      * @return
      */
-    @RequestMapping("/login_page")
-    public RespBean loginPage() {
-        return new RespBean("error", "尚未登录，请登录!");
+    @RequestMapping("/login")
+    public Result login(@RequestBody LoginDTO loginDTO) {
+
+        return Result.success(userService.login(loginDTO),"登陆成功！");
     }
 
     @PostMapping("/reg")

@@ -2,9 +2,10 @@ package org.sang.service;
 
 import org.sang.bean.Role;
 import org.sang.bean.User;
-import org.sang.config.MyPasswordEncoder;
 import org.sang.mapper.RolesMapper;
 import org.sang.mapper.UserMapper;
+import org.sang.pojo.dto.LoginDTO;
+import org.sang.utils.JWTUtils;
 import org.sang.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -97,5 +97,17 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(Long id) {
         return userMapper.getUserById(id);
+    }
+
+    public String login(LoginDTO loginDTO) {
+        User user = userMapper.loadUserByUsername(loginDTO.getUsername());
+        if(user!=null) {
+            if(passwordEncoder.matches(loginDTO.getPassword(),user.getPassword())) {
+                return JWTUtils.createJWT(user.getId());
+            }
+        }
+
+        return null;
+
     }
 }

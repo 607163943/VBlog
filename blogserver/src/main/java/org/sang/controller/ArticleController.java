@@ -3,6 +3,8 @@ package org.sang.controller;
 import org.apache.commons.io.IOUtils;
 import org.sang.bean.Article;
 import org.sang.bean.RespBean;
+import org.sang.pojo.vo.ArticleChartsVO;
+import org.sang.result.Result;
 import org.sang.service.ArticleService;
 import org.sang.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,13 +103,11 @@ public class ArticleController {
         return new RespBean("error", "还原失败!");
     }
 
-    @RequestMapping("/dataStatistics")
-    public Map<String,Object> dataStatistics() {
-        Map<String, Object> map = new HashMap<>();
+    @GetMapping("/dataStatistics")
+    public Result dataStatistics() {
         List<String> categories = articleService.getCategories();
         List<Integer> dataStatistics = articleService.getDataStatistics();
-        map.put("categories", categories);
-        map.put("ds", dataStatistics);
-        return map;
+        ArticleChartsVO articleChartsVO = ArticleChartsVO.builder().dataStatistics(dataStatistics).categories(categories).build();
+        return Result.success(articleChartsVO);
     }
 }

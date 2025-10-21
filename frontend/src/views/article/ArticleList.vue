@@ -25,37 +25,35 @@
   </el-container>
 </template>
 <script>
-  import BlogTable from '@/components/BlogTable'
-  import BlogCfg from '@/components/BlogCfg'
-  import {postRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  import {deleteRequest} from '../utils/api'
-  import {getRequest} from '../utils/api'
-  export default {
-    mounted: function () {
-      var _this = this;
-      getRequest("/isAdmin").then(resp=> {
-        if (resp.status == 200) {
-          _this.isAdmin = resp.data;
-        }
-      })
-    },
-    data() {
-      return {
-        activeName: 'post',
-        isAdmin: false
-      };
-    },
-    methods: {
-      handleClick(tab, event) {
-//        console.log(tab, event);
+import BlogTable from '@/views/article/BlogTable'
+import BlogCfg from '@/views/article/BlogCfg'
+import { getRequest } from '../../api/api'
+
+export default {
+  mounted: function () {
+    const _this = this
+    getRequest('/isAdmin').then(resp => {
+      if (resp.status === 200) {
+        _this.isAdmin = resp.data
       }
-    },
-    components: {
-      'blog_table': BlogTable,
-      'blog_cfg': BlogCfg
+    })
+  },
+  data () {
+    return {
+      activeName: 'post',
+      isAdmin: false
     }
-  };
+  },
+  methods: {
+    handleClick (tab, event) {
+      //        console.log(tab, event);
+    }
+  },
+  components: {
+    blog_table: BlogTable,
+    blog_cfg: BlogCfg
+  }
+}
 </script>
 <style>
   .article_list > .header {

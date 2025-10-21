@@ -1,15 +1,13 @@
-import axios from 'axios'
-
-let base = '';
+import request from '@/utils/request'
 export const postRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'post',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     transformRequest: [function (data) {
       // Do whatever you want to transform the data
       let ret = ''
-      for (let it in data) {
+      for (const it in data) {
         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
       }
       return ret
@@ -17,26 +15,26 @@ export const postRequest = (url, params) => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
-  });
+  })
 }
 export const uploadFileRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'post',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     headers: {
       'Content-Type': 'multipart/form-data'
     }
-  });
+  })
 }
 export const putRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'put',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     transformRequest: [function (data) {
       let ret = ''
-      for (let it in data) {
+      for (const it in data) {
         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
       }
       return ret
@@ -44,21 +42,21 @@ export const putRequest = (url, params) => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
-  });
+  })
 }
 export const deleteRequest = (url) => {
-  return axios({
+  return request({
     method: 'delete',
-    url: `${base}${url}`
-  });
+    url: `${url}`
+  })
 }
-export const getRequest = (url,params) => {
-  return axios({
+export const getRequest = (url, params) => {
+  return request({
     method: 'get',
-    data:params,
+    data: params,
     transformRequest: [function (data) {
       let ret = ''
-      for (let it in data) {
+      for (const it in data) {
         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
       }
       return ret
@@ -66,6 +64,6 @@ export const getRequest = (url,params) => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    url: `${base}${url}`
-  });
+    url: `${url}`
+  })
 }
