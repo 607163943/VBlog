@@ -1,6 +1,7 @@
 package org.sang.controller;
 
 import org.sang.bean.RespBean;
+import org.sang.result.Result;
 import org.sang.service.UserService;
 import org.sang.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/currentUserName")
-    public String currentUserName() {
-        return Util.getCurrentUser().getNickname();
+    public Result currentUserName() {
+        return Result.success((Object) Util.getCurrentUser().getNickname());
     }
 
     @RequestMapping("/currentUserId")

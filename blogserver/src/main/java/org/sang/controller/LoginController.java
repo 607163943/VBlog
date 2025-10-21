@@ -40,7 +40,7 @@ public class LoginController {
     @RequestMapping("/login")
     public Result login(@RequestBody LoginDTO loginDTO) {
 
-        return Result.success(userService.login(loginDTO),"登陆成功！");
+        return Result.success((Object) userService.login(loginDTO));
     }
 
     @PostMapping("/reg")

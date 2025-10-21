@@ -3,12 +3,11 @@ package org.sang.controller.admin;
 import org.sang.bean.RespBean;
 import org.sang.bean.Role;
 import org.sang.bean.User;
+import org.sang.pojo.dto.UserDTO;
+import org.sang.result.Result;
 import org.sang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,27 +20,27 @@ public class UserManaController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @GetMapping(value = "/user")
     public List<User> getUserByNickname(String nickname) {
         return userService.getUserByNickname(nickname);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/user/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @RequestMapping(value = "/roles", method = RequestMethod.GET)
+    @GetMapping(value = "/roles")
     public List<Role> getAllRole() {
         return userService.getAllRole();
     }
 
-    @RequestMapping(value = "/user/enabled", method = RequestMethod.PUT)
-    public RespBean updateUserEnabled(Boolean enabled, Long uid) {
-        if (userService.updateUserEnabled(enabled, uid) == 1) {
-            return new RespBean("success", "更新成功!");
+    @PutMapping(value = "/user/enabled")
+    public Result updateUserEnabled(@RequestBody UserDTO userDTO) {
+        if (userService.updateUserEnabled(userDTO.getEnabled(), userDTO.getId()) == 1) {
+            return Result.success("更新成功！");
         } else {
-            return new RespBean("error", "更新失败!");
+            return Result.success("更新失败！");
         }
     }
 
