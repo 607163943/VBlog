@@ -15,7 +15,8 @@
   </el-form>
 </template>
 <script>
-import { postRequest } from '../../api/api'
+import { login } from '@/api/login'
+import { setItem, TOKEN_KEY } from '@/utils/storage'
 
 export default {
   name: 'LoginCom',
@@ -34,29 +35,23 @@ export default {
     }
   },
   methods: {
-    submitClick: function () {
-      const _this = this
+    submitClick () {
       this.loading = true
-      postRequest('/login', {
+      login({
         username: this.loginForm.username,
         password: this.loginForm.password
-      }).then(resp => {
-        _this.loading = false
-        if (resp.status === 200) {
-          // 成功
-          const json = resp.data
-          if (json.status === 'success') {
-            _this.$router.replace({ path: '/home' })
-          } else {
-            _this.$alert('登录失败!', '失败!')
-          }
+      }).then(res => {
+        this.loading = false
+        if (res.data.code === 200) {
+          setItem(TOKEN_KEY, res.data.data)
+          this.$router.replace({ path: '/home' })
         } else {
           // 失败
-          _this.$alert('登录失败!', '失败!')
+          this.$alert('登录失败!', '失败!')
         }
-      }, resp => {
-        _this.loading = false
-        _this.$alert('找不到服务器⊙﹏⊙∥!', '失败!')
+      }, res => {
+        this.loading = false
+        this.$alert('找不到服务器⊙﹏⊙∥!', '失败!')
       })
     }
   }

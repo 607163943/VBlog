@@ -22,6 +22,7 @@
 <script>
 // 注意：路径按你的项目实际来写（原来是 '../utils/api'）
 import { getRequest } from '@/api/api'
+import { articleGetChartDataService } from '@/api/article'
 
 export default {
   name: 'DataStatisticsChart',
@@ -51,13 +52,14 @@ export default {
       }
     }
   },
-  mounted () {
-    getRequest('/article/dataStatistics')
-      .then(({ status, data }) => {
-        if (status === 200) {
+  created () {
+    console.log('测试')
+    articleGetChartDataService('/article/dataStatistics')
+      .then((res) => {
+        if (res.status === 200) {
           // 更新数据
-          this.option.xAxis.data = data.categories
-          this.option.series[0].data = data.ds
+          this.option.xAxis.data = res.data.data.categories
+          this.option.series[0].data = res.data.data.dataStatistics
 
           // 触发 VChart 侦听：替换引用可确保 setOption 生效
           this.option = { ...this.option }

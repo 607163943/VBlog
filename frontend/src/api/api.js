@@ -1,11 +1,8 @@
-import axios from 'axios'
-
-const base = process.env.VUE_APP_BASE_URL
-console.log(base)
+import request from '@/utils/request'
 export const postRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'post',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     transformRequest: [function (data) {
       // Do whatever you want to transform the data
@@ -21,9 +18,9 @@ export const postRequest = (url, params) => {
   })
 }
 export const uploadFileRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'post',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -31,9 +28,9 @@ export const uploadFileRequest = (url, params) => {
   })
 }
 export const putRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'put',
-    url: `${base}${url}`,
+    url: `${url}`,
     data: params,
     transformRequest: [function (data) {
       let ret = ''
@@ -48,13 +45,13 @@ export const putRequest = (url, params) => {
   })
 }
 export const deleteRequest = (url) => {
-  return axios({
+  return request({
     method: 'delete',
-    url: `${base}${url}`
+    url: `${url}`
   })
 }
 export const getRequest = (url, params) => {
-  return axios({
+  return request({
     method: 'get',
     data: params,
     transformRequest: [function (data) {
@@ -67,6 +64,6 @@ export const getRequest = (url, params) => {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    url: `${base}${url}`
+    url: `${url}`
   })
 }
