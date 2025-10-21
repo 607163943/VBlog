@@ -19,7 +19,7 @@
   </el-card>
 </template>
 <script>
-import { getRequest, putRequest } from '../../utils/api'
+import { getRequest, putRequest } from '../../api/api'
 
 export default {
   data () {

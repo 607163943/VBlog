@@ -1,5 +1,6 @@
 import Vue from 'vue'
-Vue.filter('formatDate', function formatDate (value) {
+// 时间格式化(年月日)
+Vue.filter('formatDate', (value) => {
   const date = new Date(value)
   const year = date.getFullYear()
   let month = date.getMonth() + 1
@@ -12,7 +13,9 @@ Vue.filter('formatDate', function formatDate (value) {
   }
   return year + '-' + month + '-' + day
 })
-Vue.filter('formatDateTime', function formatDateTime (value) {
+
+// 时间格式化(年月日时分)
+Vue.filter('formatDateTime', (value) => {
   const date = new Date(value)
   const year = date.getFullYear()
   let month = date.getMonth() + 1

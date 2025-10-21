@@ -15,7 +15,7 @@
   </el-form>
 </template>
 <script>
-import { postRequest } from '../../utils/api'
+import { postRequest } from '../../api/api'
 
 export default {
   name: 'LoginCom',

@@ -21,7 +21,7 @@
 </style>
 <script>
 // 注意：路径按你的项目实际来写（原来是 '../utils/api'）
-import { getRequest } from '@/utils/api'
+import { getRequest } from '@/api/api'
 
 export default {
   name: 'DataStatisticsChart',

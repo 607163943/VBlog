@@ -54,7 +54,7 @@
   </el-container>
 </template>
 <script>
-import { postRequest, putRequest, deleteRequest, getRequest } from '../../utils/api'
+import { postRequest, putRequest, deleteRequest, getRequest } from '../../api/api'
 
 export default {
   methods: {

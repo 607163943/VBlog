@@ -27,7 +27,7 @@
 <script>
 import BlogTable from '@/views/article/BlogTable'
 import BlogCfg from '@/views/article/BlogCfg'
-import { getRequest } from '../../utils/api'
+import { getRequest } from '../../api/api'
 
 export default {
   mounted: function () {

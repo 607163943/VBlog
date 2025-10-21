@@ -48,16 +48,35 @@
   </el-container>
 </template>
 <script>
-import { postRequest, getRequest, uploadFileRequest } from '../../utils/api'
+import { postRequest, getRequest, uploadFileRequest } from '../../api/api'
 
 // Local Registration
 import { mavonEditor } from 'mavon-editor'
 // 可以通过 mavonEditor.markdownIt 获取解析器markdown-it对象
 import 'mavon-editor/dist/css/index.css'
-import { isNotNullORBlank } from '../../utils/utils'
+import { isNotNullORBlank } from '../../utils/string-utils'
 
 export default {
-  mounted: function () {
+  components: {
+    mavonEditor
+  },
+  data () {
+    return {
+      categories: [],
+      tagInputVisible: false,
+      tagValue: '',
+      loading: false,
+      from: '',
+      article: {
+        id: '-1',
+        dynamicTags: [],
+        title: '',
+        mdContent: '',
+        cid: ''
+      }
+    }
+  },
+  mounted () {
     this.getCategories()
     const from = this.$route.query.from
     this.from = from
@@ -83,9 +102,6 @@ export default {
         _this.$message({ type: 'error', message: '页面加载失败!' })
       })
     }
-  },
-  components: {
-    mavonEditor
   },
   methods: {
     cancelEdit () {
@@ -130,7 +146,7 @@ export default {
       formdata.append('image', $file)
       uploadFileRequest('/article/uploadimg', formdata).then(resp => {
         const json = resp.data
-        if (json.status == 'success') {
+        if (json.status === 'success') {
           //            _this.$refs.md.$imgUpdateByUrl(pos, json.msg)
           _this.$refs.md.$imglst2Url([[pos, json.msg]])
         } else {
@@ -163,22 +179,6 @@ export default {
       }
       this.tagInputVisible = false
       this.tagValue = ''
-    }
-  },
-  data () {
-    return {
-      categories: [],
-      tagInputVisible: false,
-      tagValue: '',
-      loading: false,
-      from: '',
-      article: {
-        id: '-1',
-        dynamicTags: [],
-        title: '',
-        mdContent: '',
-        cid: ''
-      }
     }
   }
 }

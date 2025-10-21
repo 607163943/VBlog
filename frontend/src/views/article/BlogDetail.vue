@@ -28,7 +28,7 @@
   </el-row>
 </template>
 <script>
-import { getRequest } from '../../utils/api'
+import { getRequest } from '../../api/api'
 export default {
   methods: {
     goBack () {
