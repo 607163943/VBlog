@@ -20,8 +20,6 @@
 }
 </style>
 <script>
-// 注意：路径按你的项目实际来写（原来是 '../utils/api'）
-import { getRequest } from '@/api/api'
 import { articleGetChartDataService } from '@/api/article'
 
 export default {

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const login = ({ username, password }) => {
+export const userLoginService = ({ username, password }) => {
   return request.post('/login', {
     username,
     password
