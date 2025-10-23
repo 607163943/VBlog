@@ -154,7 +154,7 @@ export default {
         this.$message({ type: 'error', message: '数据加载失败!' })
       }
     },
-
+    // 删除用户
     async deleteUser (id) {
       await this.$confirm('删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -172,6 +172,7 @@ export default {
       this.loading = false
       this.$message({ type: 'error', message: '删除失败!' })
     },
+    // 更新用户状态
     async enabledChange (enabled, id, index) {
       this.cardLoading.splice(index, 1, true)
       const res = await userUpdateStatusService({ enabled, id })

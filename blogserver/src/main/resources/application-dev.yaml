@@ -1,0 +1,7 @@
+# 开发环境配置
+
+# MySQL数据库配置
+mysql:
+  database: vueblog2
+  username: root
+  password: 123456

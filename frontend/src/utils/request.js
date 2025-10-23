@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { getItem, TOKEN_KEY } from './storage'
+import store from '@/store'
+import { Message } from 'element-ui'
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -9,12 +10,19 @@ const instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  const token = getItem(TOKEN_KEY)
+  const token = store.state.user.token
   if (token) {
     config.headers.token = token
   }
   return config
 }, function (error) {
+  if (error.response.status === 404) {
+    Message.error('找不到网页')
+  } else if (error.response.status === 500) {
+    Message.error('服务器错误')
+  } else if (error.response.status === 403) {
+    Message.error('权限不足')
+  }
   // 对请求错误做些什么
   return Promise.reject(error)
 })

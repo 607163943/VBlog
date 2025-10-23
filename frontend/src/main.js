@@ -6,8 +6,6 @@ import '@/utils/element-ui'
 import '@/utils/mavon-editor'
 import '@/utils/echarts'
 import '@/styles/base.less'
-import '@/styles/common.less'
-import '@/styles/element-theme.less'
 
 Vue.config.productionTip = false
 

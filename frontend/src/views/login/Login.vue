@@ -1,22 +1,32 @@
 <template>
-  <el-form :rules="rules" class="login-container" label-position="left"
-           label-width="0px" v-loading="loading">
-    <h3 class="login_title">系统登录</h3>
-    <el-form-item prop="account">
-      <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
-    </el-form-item>
-    <el-form-item prop="checkPass">
-      <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
-    </el-form-item>
-    <el-checkbox class="login_remember" v-model="checked" label-position="left">记住密码</el-checkbox>
-    <el-form-item style="width: 100%">
-      <el-button type="primary" @click.native.prevent="submitClick" style="width: 100%">登录</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="login">
+    <el-form
+      :rules="rules"
+      class="login-container"
+      label-position="top"
+      v-loading="loading"
+    >
+      <h3 class="login_title">系统登录</h3>
+      <el-form-item prop="account" label="用户名">
+        <el-input type="text" v-model="loginForm.username"
+          auto-complete="off" placeholder="账号"></el-input>
+      </el-form-item>
+      <el-form-item prop="password" label="密码">
+        <el-input type="password" v-model="loginForm.password"
+          auto-complete="off" placeholder="密码"></el-input>
+      </el-form-item>
+      <el-checkbox class="login_remember" v-model="checked">记住密码</el-checkbox>
+      <el-form-item style="width: 100%">
+        <el-button type="primary" @click="login"
+        style="width: 100%">登录</el-button
+        >
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <script>
-import { login } from '@/api/login'
-import { setItem, TOKEN_KEY } from '@/utils/storage'
+import { userLoginService } from '@/api/login'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'LoginCom',
@@ -24,7 +34,7 @@ export default {
     return {
       rules: {
         account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        checkPass: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
       checked: true,
       loginForm: {
@@ -35,48 +45,51 @@ export default {
     }
   },
   methods: {
-    submitClick () {
+    async login () {
       this.loading = true
-      login({
-        username: this.loginForm.username,
-        password: this.loginForm.password
-      }).then(res => {
-        this.loading = false
+      try {
+        const res = await userLoginService(this.loginForm)
         if (res.data.code === 200) {
-          setItem(TOKEN_KEY, res.data.data)
-          this.$router.replace({ path: '/home' })
+          this.setToken(res.data.data)
+          this.$router.replace({ path: '/' })
         } else {
           // 失败
-          this.$alert('登录失败!', '失败!')
+          this.$message.error('登录失败!')
         }
-      }, res => {
+      } finally {
         this.loading = false
-        this.$alert('找不到服务器⊙﹏⊙∥!', '失败!')
-      })
-    }
+      }
+    },
+    ...mapMutations('user', ['setToken'])
   }
 }
 </script>
-<style>
+<style lang="less" scoped>
+.login {
+  padding-top: 120px;
+
   .login-container {
     border-radius: 15px;
-    background-clip: padding-box;
-    margin: 180px auto;
+    margin: 0 auto;
     width: 350px;
     padding: 35px 35px 15px 35px;
-    background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
+
+    ::v-deep(.el-form-item__label) {
+      padding: 0;
+    }
   }
 
   .login_title {
-    margin: 0px auto 40px auto;
+    margin-bottom: 20px;
     text-align: center;
     color: #505458;
   }
 
   .login_remember {
-    margin: 0px 0px 35px 0px;
+    margin-bottom: 35px;
     text-align: left;
   }
+}
 </style>
