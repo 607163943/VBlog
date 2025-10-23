@@ -1,19 +1,19 @@
 <template>
   <el-container class="home_container">
+    <!-- 头部栏 -->
     <el-header>
       <Header></Header>
     </el-header>
     <el-container>
+      <!-- 侧边栏 -->
       <el-aside width="200px">
         <SideNav></SideNav>
       </el-aside>
+      <!-- 内容栏 -->
       <el-main>
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{
-            $router.currentRoute.name
-          }}</el-breadcrumb-item>
-        </el-breadcrumb>
+        <!-- 面包屑 -->
+        <Breadcrumb></Breadcrumb>
+        <!-- 二级路由出口 -->
         <keep-alive>
           <router-view v-if="this.$route.meta.keepAlive"></router-view>
         </keep-alive>
@@ -26,12 +26,14 @@
 import { userGetCurrentUserName } from '@/api/user'
 import Header from '@/views/layout/Header'
 import SideNav from '@/views/layout/SideNav'
+import Breadcrumb from '@/views/layout/Breadcrumb'
 import { mapMutations } from 'vuex'
 export default {
   name: 'HomeCom',
   components: {
     Header,
-    SideNav
+    SideNav,
+    Breadcrumb
   },
   async mounted () {
     const userInfo = {}
@@ -49,31 +51,25 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="less" scoped>
 .home_container {
   height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
+
+  ::v-deep(.el-header) {
+    background-color: #20a0ff;
+    color: #333;
+  }
+
+  ::v-deep(.el-aside) {
+    background-color: #ececec;
+  }
 }
 
-.el-container {
+::v-deep(.el-container) {
   overflow: hidden;
-}
-
-.el-header {
-  background-color: #20a0ff;
-  color: #333;
-}
-
-.el-aside {
-  background-color: #ececec;
-}
-
-.el-main {
-  background-color: #fff;
-  color: #000;
-  text-align: center;
 }
 </style>

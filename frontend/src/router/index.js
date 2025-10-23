@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/login/Login'
-import Home from '@/views/layout'
+import Layout from '@/views/layout'
 import ArticleList from '@/views/article/ArticleList'
 import CateMana from '@/views/column/CateMana'
 import DataCharts from '@/views/chart/DataCharts'
 import PostArticle from '@/views/article/PostArticle'
 import UserMana from '@/views/user/UserMana'
 import BlogDetail from '@/views/article/BlogDetail'
+import Home from '@/views/home'
+import store from '@/store'
 
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -20,9 +21,14 @@ export default new Router({
     },
     {
       path: '/',
-      component: Home,
-      redirect: '/charts',
+      component: Layout,
+      redirect: '/home',
       children: [
+        {
+          path: '/home',
+          component: Home,
+          meta: { keepAlive: false, name: '首页', nav: { show: true, iconCls: 'fa fa-home' } }
+        },
         {
           path: '/articleList',
           component: ArticleList,
@@ -62,3 +68,11 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  store.commit('layout/createBreadcrumbNavArr', to)
+  console.log(store.state.layout.BreadcrumbNavArr)
+  next()
+})
+
+export default router

@@ -51,7 +51,6 @@ export default {
     }
   },
   created () {
-    console.log('测试')
     articleGetChartDataService('/article/dataStatistics')
       .then((res) => {
         if (res.status === 200) {
