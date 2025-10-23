@@ -1,7 +1,7 @@
 package org.sang.service;
 
-import org.sang.bean.Role;
-import org.sang.bean.User;
+import org.sang.pojo.po.Role;
+import org.sang.pojo.po.User;
 import org.sang.mapper.RolesMapper;
 import org.sang.mapper.UserMapper;
 import org.sang.pojo.dto.LoginDTO;

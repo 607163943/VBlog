@@ -1,6 +1,6 @@
 package org.sang.service;
 
-import org.sang.bean.Category;
+import org.sang.pojo.po.Category;
 import org.sang.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

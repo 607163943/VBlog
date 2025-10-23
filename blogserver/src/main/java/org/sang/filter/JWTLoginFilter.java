@@ -1,6 +1,6 @@
 package org.sang.filter;
 
-import org.sang.bean.User;
+import org.sang.pojo.po.User;
 import org.sang.service.UserService;
 import org.sang.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;

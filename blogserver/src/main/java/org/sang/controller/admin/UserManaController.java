@@ -1,8 +1,8 @@
 package org.sang.controller.admin;
 
-import org.sang.bean.RespBean;
-import org.sang.bean.Role;
-import org.sang.bean.User;
+import org.sang.pojo.po.RespBean;
+import org.sang.pojo.po.Role;
+import org.sang.pojo.po.User;
 import org.sang.pojo.dto.UserDTO;
 import org.sang.result.Result;
 import org.sang.service.UserService;

@@ -1,6 +1,6 @@
 package org.sang.utils;
 
-import org.sang.bean.User;
+import org.sang.pojo.po.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

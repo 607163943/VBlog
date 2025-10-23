@@ -1,6 +1,6 @@
 package org.sang.service;
 
-import org.sang.bean.Article;
+import org.sang.pojo.po.Article;
 import org.sang.mapper.ArticleMapper;
 import org.sang.mapper.TagsMapper;
 import org.sang.utils.Util;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 /**
