@@ -1,7 +1,7 @@
 package org.sang.controller.admin;
 
-import org.sang.bean.Article;
-import org.sang.bean.RespBean;
+import org.sang.pojo.po.Article;
+import org.sang.pojo.po.RespBean;
 import org.sang.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package org.sang.bean;
+package org.sang.pojo.po;
 
 /**
  * Created by sang on 2017/12/21.

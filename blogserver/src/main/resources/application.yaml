@@ -16,7 +16,7 @@ spring:
 
 # mybatis配置
 mybatis:
-  type-aliases-package: org.sang.bean # 扫描的数据库实体包
+  type-aliases-package: org.sang.pojo.po # 扫描的数据库实体包
   configuration:
     map-underscore-to-camel-case: true # 开启下划线转驼峰
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印sql

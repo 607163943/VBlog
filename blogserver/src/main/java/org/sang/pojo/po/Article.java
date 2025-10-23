@@ -1,4 +1,4 @@
-package org.sang.bean;
+package org.sang.pojo.po;
 
 import java.sql.Timestamp;
 import java.util.List;

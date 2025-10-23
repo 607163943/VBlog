@@ -1,7 +1,7 @@
 package org.sang.controller;
 
-import org.sang.bean.Category;
-import org.sang.bean.RespBean;
+import org.sang.pojo.po.Category;
+import org.sang.pojo.po.RespBean;
 import org.sang.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +15,8 @@ import java.util.List;
  * 超级管理员专属Controller
  */
 @RestController
-@RequestMapping("/admin/category")
-public class CategoryController {
+@RequestMapping("/admin/column")
+public class ColumnController {
     @Autowired
     CategoryService categoryService;
 

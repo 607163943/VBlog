@@ -1,4 +1,4 @@
-package org.sang.bean;
+package org.sang.pojo.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

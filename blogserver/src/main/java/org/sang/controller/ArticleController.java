@@ -1,8 +1,8 @@
 package org.sang.controller;
 
 import org.apache.commons.io.IOUtils;
-import org.sang.bean.Article;
-import org.sang.bean.RespBean;
+import org.sang.pojo.po.Article;
+import org.sang.pojo.po.RespBean;
 import org.sang.pojo.vo.ArticleChartsVO;
 import org.sang.result.Result;
 import org.sang.service.ArticleService;

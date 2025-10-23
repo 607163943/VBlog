@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/login/Login'
 import Layout from '@/views/layout'
 import ArticleList from '@/views/article/ArticleList'
-import CateMana from '@/views/column/CateMana'
+import Column from '@/views/column'
 import DataCharts from '@/views/chart/DataCharts'
 import PostArticle from '@/views/article/PostArticle'
 import UserMana from '@/views/user/UserMana'
@@ -55,8 +55,8 @@ const router = new Router({
           meta: { keepAlive: false, name: '用户管理', nav: { show: true, icon: 'fa fa-user-o' } }
         },
         {
-          path: '/cateMana',
-          component: CateMana,
+          path: '/column',
+          component: Column,
           meta: { keepAlive: false, name: '栏目管理', nav: { show: true, icon: 'fa fa-reorder' } }
         },
         {

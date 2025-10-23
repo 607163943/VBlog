@@ -2,7 +2,7 @@ package org.sang.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.sang.bean.Role;
+import org.sang.pojo.po.Role;
 
 import java.util.List;
 
