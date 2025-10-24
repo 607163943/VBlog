@@ -4,6 +4,9 @@ server:
 
 # springboot配置
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   application:
     name: v-blog # 服务名称
   profiles:

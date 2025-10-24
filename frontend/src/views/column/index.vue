@@ -1,87 +1,92 @@
 <template>
   <div class="column">
-    <div class="cate_mana_header">
-      <el-form :inline="true" :model="searchForm">
-        <el-form-item label="专栏" prop="columnName">
-          <el-input
-            placeholder="请输入专栏名称"
-            v-model="searchForm.columnName"
-            style="width: 200px">
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 10px"
-            @click="search">搜索</el-button>
+    <!-- 专栏搜索 -->
+    <column-search></column-search>
+    <div class="column-main">
+      <div class="button-group">
+        <el-button type="primary" plain @click="addColumn">新增专栏</el-button>
+        <el-button
+          type="danger"
+          plain
+          :disabled="selItems.length == 0"
+          @click="deleteAll"
+          v-if="columnTableData.length > 0"
+          >批量删除
+        </el-button>
+      </div>
+      <div class="column-table">
+        <el-table
+          ref="multipleTable"
+          :data="columnTableData"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          v-loading="loading"
+        >
+          <el-table-column type="selection" width="55" align="left">
+          </el-table-column>
+          <el-table-column label="编号" prop="id" align="left">
+          </el-table-column>
+          <el-table-column label="栏目名称" prop="cateName" align="left">
+          </el-table-column>
+          <el-table-column prop="date" label="启用时间" align="left">
+            <template slot-scope="scope">{{
+              scope.row.date | formatDate
+            }}</template>
+          </el-table-column>
+          <el-table-column label="操作" align="left">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+                >编辑
+              </el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                >删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+    <!-- TODO 需要调整对话框样式 -->
+    <el-dialog title="专栏" :visible.sync="dialogFormVisible" width="420px">
+      <el-form :model="dialogForm" label-position="top">
+        <el-form-item label="专栏" :label-width="formLabelWidth">
+          <el-input v-model="dialogForm.columnName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-    </div>
-    <div class="cate_mana_main">
-      <el-table
-        ref="multipleTable"
-        :data="columnTableData"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        v-loading="loading"
-      >
-        <el-table-column type="selection" width="55" align="left">
-        </el-table-column>
-        <el-table-column label="编号" prop="id" width="120" align="left">
-        </el-table-column>
-        <el-table-column
-          label="栏目名称"
-          prop="cateName"
-          width="120"
-          align="left"
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
         >
-        </el-table-column>
-        <el-table-column prop="date" label="启用时间" align="left">
-          <template slot-scope="scope">{{
-            scope.row.date | formatDate
-          }}</template>
-        </el-table-column>
-        <el-table-column label="操作" align="left">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-              >编辑
-            </el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-button
-        type="danger"
-        :disabled="this.selItems.length == 0"
-        style="margin-top: 10px; width: 100px"
-        @click="deleteAll"
-        v-if="this.categories.length > 0"
-        >批量删除
-      </el-button>
-    </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import {
-  postRequest,
-  putRequest,
-  deleteRequest,
-  getRequest
-} from '../../api/api'
-import { mapState, mapMutations } from 'vuex'
+import { postRequest, putRequest, deleteRequest } from '@/api/api'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import columnSearch from './columnSearch.vue'
 
 export default {
   name: 'ColumnCom',
+  components: {
+    columnSearch
+  },
   data () {
     return {
-      searchForm: { columnName: '' },
       selItems: [],
-      categories: [],
-      loading: false
+      loading: false,
+      dialogFormVisible: false,
+      dialogForm: {
+        columnName: ''
+      },
+      formLabelWidth: '120px'
     }
   },
   computed: {
@@ -91,11 +96,16 @@ export default {
     this.searchColumn()
   },
   methods: {
+    addColumn () {
+      this.dialogFormVisible = true
+    },
     // 添加专栏
     addNewCate () {
       this.loading = true
       const _this = this
-      postRequest('/admin/column/', { cateName: this.columnForm.columnName }).then(
+      postRequest('/admin/column/', {
+        cateName: this.columnForm.columnName
+      }).then(
         (resp) => {
           if (resp.status === 200) {
             const json = resp.data
@@ -126,7 +136,7 @@ export default {
         .then(() => {
           const selItems = this.selItems
           let ids = ''
-          for (let i = 0; i < selItems.length; i++) {
+          for (let i = 0; i < this.selItems.length; i++) {
             ids += selItems[i].id + ','
           }
           this.deleteCate(ids.substring(0, ids.length - 1))
@@ -222,44 +232,35 @@ export default {
       )
     },
     // 搜索专栏
-    searchColumn () {
+    async searchColumn () {
       this.loading = true
-      getRequest('/admin/column/all').then(
-        (resp) => {
-          this.setColumnTableData(resp.data)
-          this.loading = false
-        },
-        (resp) => {
-          if (resp.response.status === 403) {
-            this.$message({
-              type: 'error',
-              message: resp.response.data
-            })
-          }
-          this.loading = false
-        }
-      )
+      try {
+        await this.pageQueryColumn()
+      } finally {
+        this.loading = false
+      }
     },
-    ...mapMutations('column', ['setColumnTableData'])
+    ...mapMutations('column', ['setColumnTableData']),
+    ...mapActions('column', ['pageQueryColumn'])
   }
 }
 </script>
-<style>
-.cate_mana_header {
-  background-color: #ececec;
-  margin-top: 20px;
-  padding-left: 5px;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.cate_mana_main {
-  /*justify-content: flex-start;*/
+<style lang="less" scoped>
+.column-main {
   display: flex;
   flex-direction: column;
   padding-left: 5px;
-  background-color: #ececec;
-  margin-top: 20px;
-  padding-top: 10px;
+
+  .column-table {
+    padding-top: 10px;
+
+    ::v-deep(.el-table thead) {
+      color: #606266;
+    }
+
+    ::v-deep(.el-table th.el-table__cell) {
+      background-color: #f8f8f9;
+    }
+  }
 }
 </style>

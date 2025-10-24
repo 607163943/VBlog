@@ -2,7 +2,8 @@ package org.sang.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.sang.pojo.po.Category;
+import org.sang.pojo.dto.ColumnDTO;
+import org.sang.pojo.po.Column;
 
 import java.util.List;
 
@@ -11,11 +12,14 @@ import java.util.List;
  */
 @Mapper
 public interface CategoryMapper {
-    List<Category> getAllCategories();
+    List<Column> getAllCategories();
 
     int deleteCategoryByIds(@Param("ids") String[] ids);
 
-    int updateCategoryById(Category category);
+    int updateCategoryById(Column column);
 
-    int addCategory(Category category);
+    int addCategory(Column column);
+
+    // 专栏分页查询
+    List<Column> pageQuery(ColumnDTO columnDTO);
 }

@@ -5,12 +5,12 @@ import java.sql.Timestamp;
 /**
  * Created by sang on 2017/12/19.
  */
-public class Category {
+public class Column {
     private Long id;
     private String cateName;
     private Timestamp date;
 
-    public Category() {
+    public Column() {
     }
 
     public Timestamp getDate() {

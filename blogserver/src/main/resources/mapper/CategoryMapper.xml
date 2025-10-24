@@ -3,19 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.sang.mapper.CategoryMapper">
-    <select id="getAllCategories" resultType="org.sang.pojo.po.Category">
-        SELECT * FROM category
+    <select id="getAllCategories" resultType="org.sang.pojo.po.Column">
+        SELECT * FROM columns
+    </select>
+    <!--专栏分页查询-->
+    <select id="pageQuery" resultType="org.sang.pojo.po.Column">
+        select * from columns
+        <where>
+            <if test="columnName!=null and columnName!=''">
+                cateName like concat('%',#{columnName},'%')
+            </if>
+        </where>
     </select>
     <delete id="deleteCategoryByIds">
-        DELETE FROM category WHERE id IN
+        DELETE FROM columns WHERE id IN
         <foreach collection="ids" separator="," open="(" close=")" item="id">
             #{id}
         </foreach>
     </delete>
-    <update id="updateCategoryById" parameterType="org.sang.pojo.po.Category">
-        UPDATE category SET cateName=#{cateName} WHERE id=#{id}
+    <update id="updateCategoryById" parameterType="org.sang.pojo.po.Column">
+        UPDATE columns SET cateName=#{cateName} WHERE id=#{id}
     </update>
-    <insert id="addCategory" parameterType="org.sang.pojo.po.Category">
-        INSERT INTO category SET date=#{date},cateName=#{cateName}
+    <insert id="addCategory" parameterType="org.sang.pojo.po.Column">
+        INSERT INTO columns SET date=#{date},cateName=#{cateName}
     </insert>
 </mapper>

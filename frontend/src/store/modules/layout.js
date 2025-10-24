@@ -1,6 +1,7 @@
 export default {
   namespaced: true,
   state: {
+    // 面包屑导航数组
     BreadcrumbNavArr: []
   },
   mutations: {

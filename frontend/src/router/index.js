@@ -71,7 +71,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   store.commit('layout/createBreadcrumbNavArr', to)
-  console.log(store.state.layout.BreadcrumbNavArr)
   next()
 })
 

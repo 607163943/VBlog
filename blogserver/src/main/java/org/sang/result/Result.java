@@ -30,4 +30,8 @@ public class Result {
     public static Result success(String msg) {
         return Result.of(200,null,msg);
     }
+
+    public static Result success() {
+        return success("success");
+    }
 }

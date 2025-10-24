@@ -2,14 +2,14 @@ package org.sang.pojo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ColumnDTO extends BasePageDTO {
-    // 专栏名
-    private String columnName;
+public class BasePageDTO {
+    // 页数
+    private Integer page;
+    // 页码
+    private Integer pageSize;
 }
