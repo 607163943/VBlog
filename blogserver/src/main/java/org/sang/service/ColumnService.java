@@ -1,14 +1,16 @@
 package org.sang.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.sang.mapper.ColumnMapper;
 import org.sang.pojo.dto.ColumnDTO;
 import org.sang.pojo.dto.ColumnPageDTO;
 import org.sang.pojo.po.Column;
+import org.sang.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import java.util.List;
  * Created by sang on 2017/12/19.
  */
 @Service
-@Transactional
 public class ColumnService {
     @Autowired
     ColumnMapper columnMapper;
@@ -48,12 +49,14 @@ public class ColumnService {
     }
 
     // 专栏分页查询
-    public List<Column> pageQuery(ColumnPageDTO columnPageDTO) {
+    public PageResult<Column> pageQuery(ColumnPageDTO columnPageDTO) {
         int page= columnPageDTO.getPage();
         int pageSize= columnPageDTO.getPageSize();
         PageHelper.startPage(page,pageSize);
 
-        return columnMapper.pageQuery(columnPageDTO);
+        Page<Column> columns = columnMapper.pageQuery(columnPageDTO);
+
+        return PageResult.<Column>builder().total(columns.getTotal()).results(columns.getResult()).build();
     }
 
     /**

@@ -1,10 +1,12 @@
 package org.sang.controller;
 
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.sang.pojo.dto.ColumnDTO;
 import org.sang.pojo.dto.ColumnPageDTO;
 import org.sang.pojo.po.Column;
+import org.sang.result.PageResult;
 import org.sang.result.Result;
 import org.sang.service.ColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,8 @@ public class ColumnController {
     @ApiOperation("分页查询专栏")
     @GetMapping
     public Result pageQuery(ColumnPageDTO columnPageDTO) {
-        List<Column> columns=columnService.pageQuery(columnPageDTO);
-        return Result.success(columns);
+        PageResult<Column> pageColumns=columnService.pageQuery(columnPageDTO);
+        return Result.success(pageColumns);
     }
 
     /**

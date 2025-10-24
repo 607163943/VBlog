@@ -1,5 +1,6 @@
 package org.sang.mapper;
 
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.sang.pojo.dto.ColumnPageDTO;
@@ -26,7 +27,7 @@ public interface ColumnMapper {
     int addColumn(Column column);
 
     // 专栏分页查询
-    List<Column> pageQuery(ColumnPageDTO columnPageDTO);
+    Page<Column> pageQuery(ColumnPageDTO columnPageDTO);
 
     /**
      * 根据id查询专栏

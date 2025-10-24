@@ -16,41 +16,7 @@
           >批量删除
         </el-button>
       </div>
-      <div class="column-table">
-        <el-table
-          :data="columnTableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="updateSelectionList"
-          v-loading="tableLoading">
-          <el-table-column type="selection" width="55" align="left">
-          </el-table-column>
-          <el-table-column label="编号" prop="id" align="left">
-          </el-table-column>
-          <el-table-column label="栏目名称" prop="columnName" align="left">
-          </el-table-column>
-          <el-table-column prop="date" label="启用时间" align="left">
-            <template slot-scope="scope">{{
-              scope.row.date | formatDate
-            }}</template>
-          </el-table-column>
-          <el-table-column label="操作" align="left">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="openEditDialog(scope.row)"
-                >编辑
-              </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.row)"
-                >删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+      <column-table @edit="openEditDialog"></column-table>
     </div>
     <column-dialog ref="dialog"></column-dialog>
   </div>
@@ -60,21 +26,17 @@ import { columnDeleteByIdsService } from '@/api/column'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import columnSearch from './columnSearch.vue'
 import columnDialog from './columnDialog.vue'
+import columnTable from './columnTable.vue'
 
 export default {
   name: 'ColumnCom',
   components: {
     columnSearch,
-    columnDialog
-  },
-  data () {
-    return {
-      // 选中专栏集合
-      selectColumns: []
-    }
+    columnDialog,
+    columnTable
   },
   computed: {
-    ...mapState('column', ['columnTableData', 'tableLoading'])
+    ...mapState('column', ['selectColumns', 'columnTableData'])
   },
   mounted () {
     this.searchColumn()
@@ -90,35 +52,27 @@ export default {
     },
     // 批量删除
     async deleteAll () {
-      await this.$confirm(`确认删除这${this.selectColumns.length}条数据?`, '提示', {
-        type: 'warning',
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-      })
+      await this.$confirm(
+        `确认删除这${this.selectColumns.length}条数据?`,
+        '提示',
+        {
+          type: 'warning',
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }
+      )
 
       this.deleteColumn(this.selectColumns)
     },
-    // 更新表格复选框选中元素集合
-    updateSelectionList (newList) {
-      this.selectColumns = newList
-    },
-    // 打开删除提醒
-    async handleDelete (row) {
-      await this.$confirm(`确认删除${row.columnName} ?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-      this.deleteColumn([row])
-    },
     // 根据id集合删除专栏
     async deleteColumn (columns) {
-      const ids = columns.map(column => column.id).join(',')
+      const ids = columns.map((column) => column.id).join(',')
       this.setTableLoading(true)
       try {
         const res = await columnDeleteByIdsService(ids)
         if (res.data.code === 200) {
           this.$message.success('删除成功')
+          // 重新搜索也会更新选中专栏集合
           this.searchColumn()
         }
       } catch (error) {
@@ -146,18 +100,6 @@ export default {
   display: flex;
   flex-direction: column;
   padding-left: 5px;
-
-  .column-table {
-    padding-top: 10px;
-
-    ::v-deep(.el-table thead) {
-      color: #606266;
-    }
-
-    ::v-deep(.el-table th.el-table__cell) {
-      background-color: #f8f8f9;
-    }
-  }
 }
 
 ::v-deep(.el-dialog__body) {

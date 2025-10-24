@@ -24,7 +24,6 @@
 import { columnAddService, columnGetByIdService, columnUpdateService } from '@/api/column'
 import { mapActions, mapMutations } from 'vuex'
 export default {
-  name: 'ColumnDialog',
   data () {
     return {
       dialogVisible: false,

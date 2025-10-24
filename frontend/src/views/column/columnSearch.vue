@@ -19,7 +19,6 @@
 <script>
 import { mapMutations, mapActions } from 'vuex'
 export default {
-  name: 'ColumnSearch',
   data () {
     return {
       searchForm: { columnName: '' }
