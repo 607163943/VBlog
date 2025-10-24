@@ -2,14 +2,12 @@ package org.sang.pojo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ColumnDTO extends BaseDTO {
-    // 专栏名
-    private String columnName;
+public class BaseDTO {
+    // id
+    private Integer id;
 }

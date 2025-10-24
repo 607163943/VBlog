@@ -15,6 +15,8 @@ export default {
       // 页码
       pageSize: 10
     },
+    // 专栏表格加载状态
+    tableLoading: false,
     // 专栏表格数据
     columnTableData: []
   },
@@ -24,6 +26,9 @@ export default {
     },
     setSearchParams (state, data) {
       state.searchParams = data
+    },
+    setTableLoading (state, data) {
+      state.tableLoading = data
     }
   },
   actions: {

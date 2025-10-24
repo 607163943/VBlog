@@ -34,4 +34,16 @@ public class Result {
     public static Result success() {
         return success("success");
     }
+
+    public static Result error(Integer code,String msg) {
+        return Result.of(code,null,msg);
+    }
+
+    public static Result error(String msg) {
+        return Result.error(500,msg);
+    }
+
+    public static Result error() {
+        return error("error");
+    }
 }

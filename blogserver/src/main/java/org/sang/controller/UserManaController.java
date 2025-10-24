@@ -1,4 +1,4 @@
-package org.sang.controller.admin;
+package org.sang.controller;
 
 import org.sang.pojo.po.RespBean;
 import org.sang.pojo.po.Role;

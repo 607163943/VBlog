@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ColumnDTO extends BaseDTO {
+public class ColumnPageDTO extends BasePageDTO {
     // 专栏名
     private String columnName;
 }
