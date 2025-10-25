@@ -4,6 +4,7 @@
       :visible.sync="dialogVisible"
       width="420px"
       top="25vh"
+      @closed="clearDialogForm"
     >
       <el-form ref="dialogForm" :model="dialogForm" :rules="rules" label-position="top">
         <el-form-item label="专栏" label-width="120px" prop="columnName">
@@ -26,19 +27,26 @@ import { mapActions, mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      // 对话框可见
       dialogVisible: false,
+      // 对话框模式
       dialogMode: 'add',
+      // 初始化表单
+      defaultDialogForm: { id: 0, columnName: '' },
+      // 对话框表单
       dialogForm: {
         id: 0,
         columnName: ''
       },
+      // 表单验证规则
       rules: {
         columnName: [
           { required: true, message: '专栏名不能为空', trigger: 'blur' },
-          { min: 3, max: 15, message: '专栏名长度在 3 到 15 个字符', trigger: 'blur' },
+          { min: 2, max: 15, message: '专栏名长度在 2 到 15 个字符', trigger: 'blur' },
           { pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '专栏名只能是中文、英文、数字、下划线' }
         ]
       },
+      // 表单标签宽度
       formLabelWidth: '120px'
     }
   },
@@ -87,7 +95,7 @@ export default {
           this.$message.success('添加成功')
           this.dialogVisible = false
 
-          this.searchColumn()
+          this.$emit('success', 'add')
         }
       } catch (error) {
         this.$message.error('添加失败')
@@ -100,21 +108,15 @@ export default {
         if (res.data.code === 200) {
           this.$message.success('保存成功')
           this.dialogVisible = false
-
-          this.searchColumn()
+          this.$emit('success', 'edit')
         }
       } catch (error) {
         this.$message.error('保存失败')
       }
     },
-    // 搜索专栏
-    async searchColumn () {
-      this.setTableLoading(true)
-      try {
-        await this.pageQueryColumn()
-      } finally {
-        this.setTableLoading(false)
-      }
+    // 清空表单
+    clearDialogForm () {
+      this.dialogForm = { ...this.defaultDialogForm }
     },
     ...mapMutations('column', ['setTableLoading']),
     ...mapActions('column', ['pageQueryColumn'])

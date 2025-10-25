@@ -20,9 +20,7 @@ export default {
     // 专栏表格加载状态
     tableLoading: false,
     // 专栏表格数据
-    columnTableData: [],
-    // 选中专栏集合
-    selectColumns: []
+    columnTableData: []
   },
   mutations: {
     setColumnTableData (state, data) {
@@ -42,9 +40,6 @@ export default {
     },
     setTableLoading (state, data) {
       state.tableLoading = data
-    },
-    setSelectColumns (state, data) {
-      state.selectColumns = data
     }
   },
   actions: {
@@ -60,6 +55,15 @@ export default {
         context.commit('setTotal', res.data.data.total)
       } catch (error) {
         Message.error('专栏查询失败')
+      }
+    },
+    // 搜索专栏
+    async searchColumn (context) {
+      context.commit('setTableLoading', true)
+      try {
+        await context.dispatch('pageQueryColumn')
+      } finally {
+        context.commit('setTableLoading', false)
       }
     }
   },

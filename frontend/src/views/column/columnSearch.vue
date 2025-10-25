@@ -1,6 +1,6 @@
 <template>
   <div class="column-header">
-      <el-form :inline="true" :model="searchForm">
+      <el-form :inline="true" ref="searchForm" :model="searchForm">
         <el-form-item label="专栏" prop="columnName">
           <el-input
             placeholder="请输入专栏名称"
@@ -11,6 +11,7 @@
         <el-form-item>
           <el-button type="primary" style="margin-left: 10px"
             @click="search">搜索</el-button>
+            <el-button @click="reset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -29,10 +30,13 @@ export default {
     // TODO 需要做防抖处理
     async search () {
       this.setSearchParams(this.searchForm)
-      this.pageQueryColumn()
+      this.searchColumn()
+    },
+    reset () {
+      this.$refs.searchForm.resetFields()
     },
     ...mapMutations('column', ['setSearchParams']),
-    ...mapActions('column', ['pageQueryColumn'])
+    ...mapActions('column', ['searchColumn'])
   }
 }
 </script>
