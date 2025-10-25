@@ -1,17 +1,20 @@
 package org.sang.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.sang.pojo.dto.ColumnDTO;
 import org.sang.pojo.dto.ColumnPageDTO;
 import org.sang.pojo.po.Column;
 import org.sang.result.PageResult;
 import org.sang.result.Result;
-import org.sang.service.ColumnService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.sang.service.IColumnService;
+import org.sang.service.impl.ColumnServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,9 +23,11 @@ import java.util.List;
 @Api(tags = "专栏管理接口")
 @RestController
 @RequestMapping("/admin/column")
+@RequiredArgsConstructor
 public class ColumnController {
-    @Autowired
-    private ColumnService columnService;
+    private final IColumnService columnService;
+
+    private final ColumnServiceImpl columnServiceImpl;
 
     /**
      * 分页查询专栏
@@ -31,8 +36,8 @@ public class ColumnController {
      */
     @ApiOperation("分页查询专栏")
     @GetMapping
-    public Result pageQuery(ColumnPageDTO columnPageDTO) {
-        PageResult<Column> pageColumns=columnService.pageQuery(columnPageDTO);
+    public Result<PageResult<Column>>pageQuery(ColumnPageDTO columnPageDTO) {
+        PageResult<Column> pageColumns= columnService.pageQuery(columnPageDTO);
         return Result.success(pageColumns);
     }
 
@@ -42,14 +47,19 @@ public class ColumnController {
      */
     @ApiOperation("根据id获取专栏")
     @GetMapping("/{id}")
-    public Result getColumnById(@PathVariable("id") Long id) {
-        Column column= columnService.getColumnById(id);
+    public Result<Column> getColumnById(@PathVariable("id") Long id) {
+        Column column=columnService.getById(id);
         return Result.success(column);
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Column> getAllCategories() {
-        return columnService.getAllCategories();
+    /**
+     * 获取所有专栏
+     * @return
+     */
+    @ApiOperation("获取所有专栏")
+    @GetMapping("/all")
+    public List<Column> getAllColumn() {
+        return columnService.list();
     }
 
     /**
@@ -59,8 +69,8 @@ public class ColumnController {
      */
     @ApiOperation("根据id批量删除专栏")
     @DeleteMapping
-    public Result deleteColumnByIds(@RequestParam("ids") List<Long> ids) {
-        boolean result = columnService.deleteColumnByIds(ids);
+    public Result<Object> deleteColumnByIds(@RequestParam("ids") List<Long> ids) {
+        boolean result=columnService.removeByIds(ids);
         if (result) {
             return Result.success("删除成功!");
         }
@@ -75,15 +85,19 @@ public class ColumnController {
     @ApiOperation("添加专栏")
 
     @PostMapping
-    public Result addColumn(@RequestBody ColumnDTO columnDTO) {
+    public Result<Object> addColumn(@RequestBody ColumnDTO columnDTO) {
 
         if ("".equals(columnDTO.getColumnName()) || columnDTO.getColumnName() == null) {
             return Result.error( "专栏名不能为空!");
         }
 
-        int result = columnService.addColumn(columnDTO);
+        Column column = BeanUtil.copyProperties(columnDTO, Column.class);
 
-        if (result == 1) {
+        column.setDate(new Timestamp(System.currentTimeMillis()));
+
+        boolean result=columnService.save(column);
+
+        if (result) {
             return Result.success( "添加成功!");
         }
         return Result.error( "添加失败!");
@@ -96,9 +110,10 @@ public class ColumnController {
      */
     @ApiOperation("根据id修改专栏")
     @PutMapping
-    public Result updateColumn(@RequestBody ColumnDTO columnDTO) {
-        int i = columnService.updateColumn(columnDTO);
-        if (i == 1) {
+    public Result<Object> updateColumn(@RequestBody ColumnDTO columnDTO) {
+        Column column = BeanUtil.copyProperties(columnDTO, Column.class);
+        boolean result= columnService.updateById(column);
+        if (result) {
             return Result.success( "修改成功!");
         }
         return Result.error("修改失败！");

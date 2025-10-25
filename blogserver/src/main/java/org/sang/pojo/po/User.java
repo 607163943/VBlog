@@ -1,6 +1,9 @@
 package org.sang.pojo.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +15,9 @@ import java.util.List;
 /**
  * Created by sang on 2017/12/17.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
     private Long id;
     private String username;
@@ -22,50 +28,6 @@ public class User implements UserDetails {
     private String email;
     private String userface;
     private Timestamp regTime;
-
-    public Timestamp getRegTime() {
-        return regTime;
-    }
-
-    public void setRegTime(Timestamp regTime) {
-        this.regTime = regTime;
-    }
-
-    public String getUserface() {
-        return userface;
-    }
-
-    public void setUserface(String userface) {
-        this.userface = userface;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
 
     @Override
     @JsonIgnore
@@ -90,10 +52,6 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     @JsonIgnore
     public List<GrantedAuthority> getAuthorities() {
@@ -102,26 +60,5 @@ public class User implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         }
         return authorities;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 }

@@ -159,7 +159,7 @@ export default {
     },
     getCategories () {
       const _this = this
-      getRequest('/admin/category/all').then(resp => {
+      getRequest('/admin/column/all').then(resp => {
         _this.categories = resp.data
       })
     },
